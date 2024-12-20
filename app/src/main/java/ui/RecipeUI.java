@@ -68,8 +68,6 @@ public class RecipeUI {
         ArrayList<String> recipesData = new ArrayList<>();
         // RecipeFileHandlerからレシピデータを読み込む
         recipesData = fileHandler.readRecipes();
-
-        System.out.println("Recipes:");
         // レシピデータを整形してコンソールに表示する
         for (String recipe : recipesData) {
             System.out.println("-----------------------------------");

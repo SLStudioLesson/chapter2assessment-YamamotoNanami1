@@ -2,6 +2,7 @@ package data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,14 +30,29 @@ public class RecipeFileHandler {
     public ArrayList<String> readRecipes() {
         ArrayList<String> recipesData = new ArrayList<>();
         // recipes.txtからレシピデータを読み込む
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))){
             String line = "";
+
+            // 解きなおし後修正
+            // recipes.txtファイルが空の場合の処理
+            if ((line = reader.readLine()) == null){
+                throw new Exception();
+            }
+
             while((line = reader.readLine()) != null){
                 recipesData.add(line);
             }
+            System.out.println("Recipes:");
+
         //IOExceptionが発生したときはError reading file: 例外のメッセージとコンソールに表示します。
         } catch (IOException e) {
             System.out.println("Error reading file:" + e.getMessage());
+            
+        // 解きなおし後修正
+        // recipes.txtファイルが空の場合の処理
+        } catch (Exception e) {
+            System.out.println("No recipes available.");
         }
         return recipesData;
     }
