@@ -45,6 +45,7 @@ public class RecipeUI {
                         break;
                     case "3":
                         // 設問3: 検索機能
+                        searchRecipe();
                         break;
                     case "4":
                         System.out.println("Exit the application.");
@@ -76,8 +77,6 @@ public class RecipeUI {
             System.out.println("Recipe Name: " + keyValue[0]);
             System.out.println("Main Ingredients: " + keyValue[1]);
         }
-
-
     }
 
     /**
@@ -87,14 +86,14 @@ public class RecipeUI {
      * @throws java.io.IOException 入出力が受け付けられない
      */
     private void addNewRecipe() throws IOException {
+        // ユーザーからレシピ名を入力させる
         System.out.print("Enter recipe name: ");
         String recipeName = reader.readLine();
+        // ユーザーから材料を入力させる
         System.out.print("Enter main ingredients (comma separated): ");
         String ingredients = reader.readLine();
-
+        // RecipeFileHandlerを使用してrecipes.txtに新しいレシピを追加
         fileHandler.addRecipe(recipeName, ingredients);
-
-
     }
 
     /**
@@ -104,8 +103,49 @@ public class RecipeUI {
      * @throws java.io.IOException 入出力が受け付けられない
      */
     private void searchRecipe() throws IOException {
+        System.out.print("Enter search query (e.g., 'name=Tomato&ingredient=Garlic'): ");
+        String query = reader.readLine();
 
+        String name = "null";
+        String ingredient = "null";
+
+        // 入力されたクエリを分割しそれぞれレシピ名はnameに材料はingredientに代入
+        String[] pairs = query.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            if (keyValue[0].equals("name")){
+                name = keyValue[1];
+            } else if (keyValue[0].equals("ingredient")){
+                ingredient = keyValue[1];
+            }
+        }
+
+        ArrayList<String> recipesData = new ArrayList<>();
+        // RecipeFileHandlerからレシピデータを読み込む
+        recipesData = fileHandler.readRecipes();
+
+        ArrayList<String> recipesResult = new ArrayList<>();
+
+        for (String recipe : recipesData) {
+            String[] keyValue = recipe.split(",",2);
+                if ((keyValue[0].indexOf(name) != -1) && (ingredient.equals("null"))) {
+                    recipesResult.add(recipe);
+                } else if ((name .equals("null")) && (keyValue[1].indexOf(ingredient) != -1)){
+                    recipesResult.add(recipe);
+                } else if ((keyValue[0].indexOf(name) != -1) && (keyValue[1].indexOf(ingredient) != -1)){
+                    recipesResult.add(recipe);
+                }
+        }
+
+        System.out.println("Search Results:");
+
+        if(!recipesResult.isEmpty()){
+            for (String result : recipesResult){
+            System.out.println(result);
+            }
+        } else {
+            System.out.println("No recipes found matching the criteria.");
+        }
     }
-
 }
 

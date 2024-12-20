@@ -1,7 +1,9 @@
 package data;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -49,7 +51,10 @@ public class RecipeFileHandler {
      */
      // 
     public void addRecipe(String recipeName, String ingredients) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath, true))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,true)))  {
+            // 改行
+            writer.newLine();
+            // 新しいレシピ(レシピ名、材料)をrecipes.txtに追加
             writer.write(recipeName + "," + ingredients);
         } catch (IOException e) {
             e.printStackTrace();
